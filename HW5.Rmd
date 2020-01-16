@@ -1,0 +1,40 @@
+---
+title: "HW5 Plots"
+author: "Ryan Mahtab"
+date: "12/14/2019"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+languages = c(1:13)
+KL_divergence = c(2036.307892, 1446.905943, 1335.869791, 743.678471, 14.497046, 9097.490202, 410.340914, 4.239918, 3171.729715, 13.146736, 1108.437377, 751.700201, 3631.133715)
+relative_entropy = c(0.799648, 0.878982, 0.455717, 0.849670, 0.875801, 0.735950, 0.734137, 0.875227, 0.699176, 0.872847, 0.872228, 0.900045, 0.705617)
+
+lang_data = data.frame(cbind(languages, relative_entropy, KL_divergence))
+```
+
+```{r}
+re_plot = ggplot(lang_data, aes(x = languages, y = relative_entropy)) + geom_point()
+re_plot
+
+kl_plot = ggplot(lang_data, aes(x = languages, y = KL_divergence)) + geom_point()
+kl_plot
+```
+
+```{r}
+pap_re = 0.744035
+pap_kl = 2867.128641
+pap_score = pap_re*pap_kl
+
+lang_data["score"] = lang_data$relative_entropy*lang_data$KL_divergence
+```
+
+```{r}
+score_plot = ggplot(lang_data, aes(x = languages, y = score)) + geom_point() + geom_hline(yintercept = pap_score, col = "red") + labs(x = "Given Texts (1-13)", y = "Final Score", title = "Final Scores and Relation to Threshold Score")
+score_plot
+```
+
